@@ -528,8 +528,8 @@ void YL4()
     DriveTrainStop(brake);
     // =============== wailk in ===================
     SetVel_DtLeft_DtRight(30, 30);
-    DT_Left.spinFor(forward, 100, degrees, false);
-    DT_Right.spinFor(forward, 100, degrees, true);
+    DT_Left.spinFor(forward, 120, degrees, false);
+    DT_Right.spinFor(forward, 120, degrees, true);
     IntakeReload = true;
     wait(0.4, sec);
     // =============== wailk out ===================
@@ -624,7 +624,7 @@ void YL4()
     SetVel_DtLeft_DtRight(100, 80);
     DT_Left.spin(forward);
     DT_Right.spin(forward);
-    wait(0.8, sec);
+    wait(0.6, sec);
     IntakeReload = true;
     wait(0.2, sec);
     DriveTrainStop(brake);
@@ -911,13 +911,13 @@ int findBeamBag2()
         DT_Left.spin(forward);
         DT_Right.spin(forward);
         Touchled8.setColor(blue);
-        while (distance5.objectDistance(mm) > 245)
+        while (distance5.objectDistance(mm) > 240)
         {
             wait(20, msec);
         }
         // Intake
-        // Pneumatic10.extend(cylinder1);
-        IntakeReload = true;
+        Pneumatic10.extend(cylinder1);
+        Intake();
         DriveTrainStop(brake);
         speedAuto = -30;
         int count = 0;
