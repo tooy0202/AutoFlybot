@@ -1,6 +1,7 @@
-/*--------------------------------NO.7----------------------------------------*/
+/*----------------------------------NO.8--------------------------------------*/
 /*                                                                            */
 /*    Module:       main.cpp                                                  */
+/*    Author:       tooy0                                                     */
 /*    Created:      9/2/2026, 9:47:19 AM                                      */
 /*    Description:  IQ2 project                                               */
 /*                                                                            */
@@ -76,8 +77,6 @@ float count_Bag = 0.0;
 bool IntakeReload, reload, beambag, reloadcomplete, Forword, Reverse, RedBlue, start, InTakeUp = false;
 
 bool Up, Arm_IntakeReload, Flip = true;
-
-int waitTimeforshoot = 1500;
 
 task *autoL3 = nullptr;
 
@@ -295,12 +294,12 @@ void Intake()
     // waitTime = 0;
     wait(0.2, seconds);
     while (fabs(Intake1.velocity(pct)) > 5 &&
-           waitTime < waitTimeforshoot)
+           waitTime < 1400)
     {
         wait(20, msec);
         waitTime += 20;
     }
-    // wait(0.1, seconds);
+    wait(0.1, seconds);
 
     Pneumatic10.retract(cylinder1);
     // Intake1.setVelocity(127, percent);
@@ -375,7 +374,7 @@ void L3()
     wait(0.2, seconds);
     DT_Left.stop();
     DT_Right.stop();
-    // wait(0.1, seconds);
+    wait(0.2, seconds);
     // --------- shoot --------------
     Shot();
     // --------- Start Exit ---------
@@ -494,13 +493,12 @@ void YL4()
     beambag = true;
     reloadcomplete = true;
     //================ start ========================
-    SetVel_DtLeft_DtRight(70, 70);
-    DT_Left.spinFor(reverse, 50, degrees, false);
-    DT_Right.spinFor(reverse, 50, degrees, true);
+    SetVel_DtLeft_DtRight(50, 50);
+    DT_Left.spinFor(reverse, 40, degrees, false);
+    DT_Right.spinFor(reverse, 40, degrees, true);
     DriveTrainStop(brake);
-    DT_Left.spinFor(reverse, 35, deg, false);
-    DT_Right.spinFor(forward, 35, deg, true);
-    SetVel_DtLeft_DtRight(40, 40);
+    DT_Left.spinFor(reverse, 40, deg, false);
+    DT_Right.spinFor(forward, 40, deg, true);
     DT_Left.spin(reverse);
     DT_Right.spin(reverse);
     wait(0.2, sec);
@@ -527,30 +525,31 @@ void YL4()
     DriveTrainStop(brake);
     // =============== wailk in ===================
     SetVel_DtLeft_DtRight(30, 30);
-    DT_Left.spinFor(forward, 120, degrees, false);
-    DT_Right.spinFor(forward, 120, degrees, true);
+    DT_Left.spinFor(forward, 100, degrees, false);
+    DT_Right.spinFor(forward, 100, degrees, true);
     IntakeReload = true;
     wait(0.4, sec);
     // =============== wailk out ===================
-    DT_Left.spinFor(reverse, 120, degrees, false);
-    DT_Right.spinFor(reverse, 120, degrees, true);
+    DT_Left.spinFor(reverse, 130, degrees, false);
+    DT_Right.spinFor(reverse, 130, degrees, true);
     wait(0.2, sec);
     // // =============== turn ===================
     TurnRight_h_v_m(322, 30, 5);
     // =============== go shoot ===================
-    SetVel_DtLeft_DtRight(60, 60);
+    SetVel_DtLeft_DtRight(100, 100);
     DT_Left.spin(reverse);
     DT_Right.spin(reverse);
-    wait(0.2, sec);
+    wait(0.7, sec);
     while (DT_Left.velocity(pct) < -5 && DT_Right.velocity(pct) < -5)
     {
         /* code */
         wait(20, msec);
     }
-    wait(300, msec);
+    // wait(300, msec);
     // shoot
-    DriveTrainStop(hold);
+    // DriveTrainStop(hold);
     Shot();
+    DriveTrainStop(hold);
     // // // =============== Start step 3 ===================
     SetVel_DtLeft_DtRight(50, 50);
     DT_Left.spinFor(forward, 80, degrees, false);
@@ -574,22 +573,23 @@ void YL4()
     DT_Right.spinFor(reverse, 230, degrees, true);
     wait(0.2, sec);
     // // =============== turn ===================
-    TurnRight_h_v_m(325, 30, 5);
+    TurnRight_h_v_m(322, 30, 5);
     // =============== go shoot ===================
-    SetVel_DtLeft_DtRight(60, 60);
+    SetVel_DtLeft_DtRight(100, 100);
     DT_Left.spin(reverse);
     DT_Right.spin(reverse);
-    wait(0.2, sec);
+    wait(0.7, sec);
     while (DT_Left.velocity(pct) < -5 && DT_Right.velocity(pct) < -5)
     {
         /* code */
         wait(20, msec);
     }
-    wait(300, msec);
+    // wait(200, msec);
     // shoot
-    DriveTrainStop(hold);
+    // DriveTrainStop(hold);
     Shot();
-    // =============== Start step 4 ===================
+    DriveTrainStop(hold);
+    // // =============== Start step 4 ===================
     SetVel_DtLeft_DtRight(100, 100);
     DT_Left.spinFor(forward, 80, degrees, false);
     DT_Right.spinFor(forward, 80, degrees, true);
@@ -623,7 +623,7 @@ void YL4()
     SetVel_DtLeft_DtRight(100, 80);
     DT_Left.spin(forward);
     DT_Right.spin(forward);
-    wait(0.6, sec);
+    wait(0.8, sec);
     IntakeReload = true;
     wait(0.2, sec);
     DriveTrainStop(brake);
@@ -639,7 +639,7 @@ void YL4()
 
 int CalibrateInertial()
 {
-    Pneumatic10.pumpOn();
+    Pneumatic4.pumpOn();
     Pneumatic10.retract(cylinder1);
     Pneumatic10.retract(cylinder2);
     Pneumatic4.extend(cylinder2);
@@ -665,7 +665,7 @@ int CalibrateInertial()
     Brain.Screen.setCursor(1, 1);
     Brain.Screen.print("Calibrating...");
     // start calibration
-    Pneumatic10.pumpOff();
+    Pneumatic4.pumpOff();
     Touchled8.setColor(red);
     BrainInertial.calibrate();
     // wait.....
@@ -678,7 +678,7 @@ int CalibrateInertial()
     // calibration complete
     Touchled8.setColor(green);
     wait(1000, msec);
-    Pneumatic10.pumpOn();
+    Pneumatic4.pumpOn();
     Brain.Screen.clearScreen();
     Brain.Screen.setCursor(1, 1);
     Brain.Screen.print("Calibration Done!");
@@ -694,7 +694,7 @@ int CalibrateInertial()
         printf("\n%d", ff);
         if (start)
         {
-            if (Brain.Timer.value() > 60)
+            if (Brain.Timer.value() > 58)
             {
                 Brain.programStop();
             }
@@ -898,11 +898,10 @@ int findBeamBag2()
 {
     int count_Bag = 0;
     // ---------------- funtion shoot ----------------
-    while (count_Bag <= 3)
+    while (count_Bag <= 999)
     {
         // Touchled8.setColor(yellow_orange);
         int speedAuto = 127;
-        waitTimeforshoot = 1000;
         SetVel_DtLeft_DtRight(100, 100);
         // DT_Left.spin(reverse);
         // DT_Right.spin(forward);
@@ -915,9 +914,9 @@ int findBeamBag2()
             wait(20, msec);
         }
         // Intake
-        Pneumatic10.extend(cylinder1);
-        Intake();
+        IntakeReload = true;
         DriveTrainStop(brake);
+        wait(0.1, seconds);
         speedAuto = -30;
         int count = 0;
         Color2.setLight(100, percent);
@@ -946,7 +945,7 @@ int findBeamBag2()
         DT_Right.spin(reverse);
         wait(0.2, seconds);
         DriveTrainStop(brake);
-        // wait(0.1, seconds);
+        wait(0.2, seconds);
         // --------- shoot --------------
         Catapult7.spin(reverse);
         wait(0.2, seconds);
@@ -978,7 +977,8 @@ int findBeamBag2()
         DT_Left.spin(forward);
         DT_Right.spin(forward);
         wait(0.2, seconds);
-        SetVel_DtLeft_DtRight(70, 70);
+        //No8
+        SetVel_DtLeft_DtRight(60, 60);
         DT_Left.spin(reverse);
         DT_Right.spin(forward);
         wait(0.2, seconds);
